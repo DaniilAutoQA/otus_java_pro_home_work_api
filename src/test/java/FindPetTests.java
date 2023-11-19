@@ -3,17 +3,16 @@ import dto.PetDto;
 import dto.TagDto;
 import lombok.RequiredArgsConstructor;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import services.PetApiActions;
 
 import java.util.List;
 
 @RequiredArgsConstructor
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class FindPetTests {
 
-    private static PetApiActions petApiActions = new PetApiActions();
+    private PetApiActions petApiActions = new PetApiActions();
     private static PetDto pet = PetDto.builder().id(1L)
             .category(CategoryDto.builder().id(1).name("Home").build())
             .name("KOT")
@@ -22,8 +21,13 @@ public class FindPetTests {
             .status("available").build();
 
     @BeforeAll
-    public static void createCondition() {
+    public void createCondition() {
         petApiActions.createPet(pet);
+    }
+
+    @AfterAll
+    public void quitTests(){
+        petApiActions.deletePet(1L);
     }
 
     @Test

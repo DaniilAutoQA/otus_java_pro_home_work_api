@@ -37,4 +37,10 @@ public class PetApiActions {
                 .then().log().all();
     }
 
+    public void deletePet(long id) {
+        given(specification)
+                .delete(PATH + "/" + id)
+                .then().log().all();
+    }
+
 }

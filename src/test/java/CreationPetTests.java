@@ -3,14 +3,17 @@ import dto.PetDto;
 import dto.TagDto;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import services.PetApiActions;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CreationPetTests {
 
     PetApiActions petApiActions = new PetApiActions();
@@ -66,5 +69,10 @@ public class CreationPetTests {
     @DisplayName("Проверка json схемы метода добавления Pet")
     public void checkJsonSchemaInCreationPet() {
         petApiActions.createPet(pet).statusCode(200).body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/createPet.json"));
+    }
+
+    @AfterAll
+    public void quitTests() {
+        petApiActions.deletePet(1L);
     }
 }
