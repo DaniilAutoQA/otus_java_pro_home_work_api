@@ -26,7 +26,7 @@ public class FindPetTests {
     }
 
     @AfterAll
-    public void quitTests(){
+    public void quitTests() {
         petApiActions.deletePet(1L);
     }
 

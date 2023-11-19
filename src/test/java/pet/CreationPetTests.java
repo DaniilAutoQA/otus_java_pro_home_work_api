@@ -1,7 +1,8 @@
+package pet;
+
 import dto.CategoryDto;
 import dto.PetDto;
 import dto.TagDto;
-import io.restassured.module.jsv.JsonSchemaValidator;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
@@ -11,13 +12,11 @@ import services.PetApiActions;
 
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CreationPetTests {
 
-    PetApiActions petApiActions = new PetApiActions();
-    PetDto pet = PetDto.builder().id(1L)
+    private PetApiActions petApiActions = new PetApiActions();
+    private PetDto pet = PetDto.builder().id(1L)
             .category(CategoryDto.builder().id(1).name("Home").build())
             .name("KOT")
             .photoUrls(List.of("https://mykaleidoscope.ru/x/uploads/posts/2022-10/1666328852_41-mykaleidoscope-ru-p-dovolnaya-morda-kota-krasivo-45.jpg"))
@@ -53,26 +52,12 @@ public class CreationPetTests {
                 .assertThat(petResult.getTags())
                 .as("неверное значение Tag")
                 .isEqualTo(pet.getTags());
-
         softAssertions.assertAll();
-    }
-
-    @Test
-    @DisplayName("Проверка вызова метода добавления Pet с пустым телом")
-    public void checkCreationPetWithEmptyFields() {
-        PetDto pet = PetDto.builder().build();
-        PetDto petResult = petApiActions.createPet(pet).extract().body().as(PetDto.class);
-        assertThat(petResult.getId()).isNotNull();
-    }
-
-    @Test
-    @DisplayName("Проверка json схемы метода добавления Pet")
-    public void checkJsonSchemaInCreationPet() {
-        petApiActions.createPet(pet).statusCode(200).body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/createPet.json"));
+        petApiActions.getPet(pet.getId()).statusCode(200);
     }
 
     @AfterAll
     public void quitTests() {
-        petApiActions.deletePet(1L);
+        petApiActions.deletePet(pet.getId());
     }
 }

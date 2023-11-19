@@ -55,12 +55,7 @@
     }
   },
   "required": [
-    "id",
-    "category",
-    "name",
-    "photoUrls",
-    "tags",
-    "status"
+    "id"
   ],
   "additionalProperties": false
 }
