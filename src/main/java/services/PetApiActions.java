@@ -6,17 +6,19 @@ import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 
+import java.util.Locale;
+
 import static io.restassured.RestAssured.given;
 
 public class PetApiActions {
 
-    public final static String BASE_URL = "https://petstore.swagger.io/v2";
+   private String baseUrl = System.getProperty("api.base.url");
 
     private RequestSpecification specification;
 
     public PetApiActions() {
         specification = given()
-                .baseUri(BASE_URL)
+                .baseUri(baseUrl)
                 .basePath("/pet")
                 .contentType(ContentType.JSON)
                 .log().all();
